@@ -17,6 +17,12 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _deleteTodo(int index) {
+    setState(() {
+      _todoItems.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +40,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 title: Text(_todoItems[index]),
                 trailing: IconButton(
                   icon: Icon(Icons.more_vert),
-                  onPressed: () {},
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: Text(_todoItems[index]),
+                      actions: [
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          color: Colors.red,
+                          onPressed: () {
+                            _deleteTodo(index);
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
