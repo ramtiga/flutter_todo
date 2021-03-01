@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/create_page.dart';
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -9,15 +10,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  List<String> _todoItems = [
-    "英語の課題",
-    "牛乳を買う",
-  ];
-  int _counter = 0;
-
-  void _incrementCounter() {
+  List<String> _todoItems = [];
+  void _addTodo(String title) {
     setState(() {
-      _counter++;
+      _todoItems.add(title);
     });
   }
 
@@ -44,6 +40,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final String title = await Navigator.of(context)
+              .push(MaterialPageRoute(builder: (context) => CreatePage()));
+          if (title != null && title != "") _addTodo(title);
+        },
+        tooltip: 'Add Todo',
+        child: Icon(Icons.add),
       ),
     );
   }
