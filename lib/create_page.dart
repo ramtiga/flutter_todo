@@ -9,8 +9,8 @@ class CreatePage extends StatefulWidget {
 
 class _CreatePageState extends State<CreatePage> {
   String _title = "";
-
   IconData _icon;
+  bool _isError = false;
 
   void _pickIcon() async {
     IconData icon = await FlutterIconPicker.showIconPicker(context);
@@ -54,8 +54,24 @@ class _CreatePageState extends State<CreatePage> {
                 ),
               ),
               ElevatedButton(
-                  onPressed: () => Navigator.pop(context, Todo(_title, _icon)),
-                  child: Text("Back"))
+                child: Text("Add"),
+                onPressed: () {
+                  if (_title == "" || _icon == null) {
+                    setState(() {
+                      _isError = true;
+                    });
+                    return;
+                  }
+                  Navigator.pop(context, Todo(_title, _icon));
+                },
+              ),
+              if (_isError)
+                Text(
+                  "すべての項目を入力してください",
+                  style: TextStyle(
+                    color: Colors.red,
+                  ),
+                ),
             ],
           ),
         ),
