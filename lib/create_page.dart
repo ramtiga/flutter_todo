@@ -1,6 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
+import 'package:provider/provider.dart';
 import 'my_home_page.dart';
+
+class CreatePage2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final Todo todo = Provider.of<Todo>(context);
+    String _title = "";
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Create2 TODO"),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(40.0),
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                todo.todoList.length.toString(),
+                style: TextStyle(fontSize: 40),
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: "TODO title"),
+                onChanged: (String text) => _title = text,
+              ),
+              ElevatedButton(
+                child: Text("Add"),
+                onPressed: () {
+                  Navigator.pop(context, todo.addTodo(_title));
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 class CreatePage extends StatefulWidget {
   @override
@@ -62,7 +101,7 @@ class _CreatePageState extends State<CreatePage> {
                     });
                     return;
                   }
-                  Navigator.pop(context, Todo(_title, _icon));
+                  // Navigator.pop(context, Todo(_title, _icon));
                 },
               ),
               if (_isError)
