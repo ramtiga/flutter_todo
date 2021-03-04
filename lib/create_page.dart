@@ -3,15 +3,21 @@ import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_todo/todo.dart';
 import 'package:provider/provider.dart';
 
-class CreatePage2 extends StatelessWidget {
+class CreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final Todo todo = Provider.of<Todo>(context);
+    final Todo todo = Provider.of<Todo>(context, listen: false);
+    final _icon = Provider.of<ValueNotifier<IconData>>(context, listen: false);
+
     String _title = "";
+
+    void _pickIcon() async {
+      _icon.value = await FlutterIconPicker.showIconPicker(context);
+    }
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create2 TODO"),
+        title: const Text("Create TODO"),
       ),
       body: Container(
         padding: EdgeInsets.all(40.0),
@@ -19,18 +25,40 @@ class CreatePage2 extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(
-                todo.todoList.length.toString(),
-                style: TextStyle(fontSize: 40),
+              Consumer<Todo>(
+                builder: (context, todo, child) => Text(
+                  todo.todoList.length.toString(),
+                  style: TextStyle(fontSize: 40),
+                ),
               ),
               TextField(
                 decoration: InputDecoration(labelText: "TODO title"),
                 onChanged: (String text) => _title = text,
               ),
+              Consumer<ValueNotifier<IconData>>(
+                builder: (context, value, child) => Container(
+                  padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _icon != null
+                          ? Icon(
+                              _icon.value,
+                              size: 45.0,
+                            )
+                          : Text("none"),
+                      ElevatedButton(
+                        child: const Text("Pick Icon"),
+                        onPressed: () => _pickIcon(),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
               ElevatedButton(
                 child: Text("Add"),
                 onPressed: () {
-                  Navigator.pop(context, todo.addTodo(_title));
+                  Navigator.pop(context, todo.addTodo(_title, _icon.value));
                 },
               ),
             ],
@@ -41,12 +69,12 @@ class CreatePage2 extends StatelessWidget {
   }
 }
 
-class CreatePage extends StatefulWidget {
+class CreatePage0 extends StatefulWidget {
   @override
-  _CreatePageState createState() => _CreatePageState();
+  _CreatePage0State createState() => _CreatePage0State();
 }
 
-class _CreatePageState extends State<CreatePage> {
+class _CreatePage0State extends State<CreatePage0> {
   String _title = "";
   IconData _icon;
   bool _isError = false;

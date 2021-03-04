@@ -5,8 +5,12 @@ import 'my_home_page.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (_) => Todo(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<Todo>(create: (_) => Todo()),
+        ChangeNotifierProvider<ValueNotifier<IconData>>(
+            create: (_) => ValueNotifier<IconData>(null)),
+      ],
       child: MyApp(),
     ),
   );
@@ -24,17 +28,5 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: MyHomePage());
-    // home: ChangeNotifierProvider(
-    //   create: (context) => Todo(),
-    //   child: MyHomePage(),
-    // ));
-    // home: MultiProvider(
-    //   providers: [
-    //     ChangeNotifierProvider<Todo>(
-    //       create: (context) => Todo(),
-    //     ),
-    //   ],
-    //   child: MyHomePage(),
-    // ),
   }
 }

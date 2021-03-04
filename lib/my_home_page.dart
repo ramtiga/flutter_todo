@@ -20,7 +20,8 @@ class MyHomePage extends StatelessWidget {
               decoration: BoxDecoration(
                   border: Border.all(width: 1.0, color: Colors.red)),
               child: ListTile(
-                title: Text(todo.todoList[index].title),
+                leading: Icon(todo.todoList[index].getIcon),
+                title: Text(todo.todoList[index].getTitle),
               ),
             ),
           );
@@ -29,7 +30,7 @@ class MyHomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => CreatePage2(),
+            builder: (context) => CreatePage(),
           ));
         },
         child: Icon(Icons.add),
