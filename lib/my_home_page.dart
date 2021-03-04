@@ -18,10 +18,28 @@ class MyHomePage extends StatelessWidget {
           return Card(
             child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(width: 1.0, color: Colors.red)),
+                  border: Border.all(width: 1.0, color: Colors.deepOrange)),
               child: ListTile(
                 leading: Icon(todo.todoList[index].getIcon),
                 title: Text(todo.todoList[index].getTitle),
+                trailing: IconButton(
+                  icon: Icon(Icons.more_vert),
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: Text(todo.todoList[index].getTitle),
+                      actions: [
+                        IconButton(
+                            icon: Icon(Icons.delete),
+                            color: Colors.deepOrange,
+                            onPressed: () {
+                              todo.deleteTodo(index);
+                              Navigator.pop(context);
+                            }),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
           );

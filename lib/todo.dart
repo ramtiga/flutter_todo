@@ -10,4 +10,9 @@ class Todo with ChangeNotifier {
     todoList.add(todoModel);
     notifyListeners();
   }
+
+  void deleteTodo(int index) {
+    todoList.removeAt(index);
+    notifyListeners();
+  }
 }
