@@ -11,6 +11,13 @@ class Todo with ChangeNotifier {
     notifyListeners();
   }
 
+  void editTodo(String title, IconData icon, int index) {
+    TodoModel todoModel = TodoModel(title, icon);
+    todoList.removeAt(index);
+    todoList.insert(index, todoModel);
+    notifyListeners();
+  }
+
   void deleteTodo(int index) {
     todoList.removeAt(index);
     notifyListeners();

@@ -40,6 +40,11 @@ class MyHomePage extends StatelessWidget {
                     ),
                   ),
                 ),
+                onTap: () async {
+                  await Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => CreatePage(index: index),
+                  ));
+                },
               ),
             ),
           );

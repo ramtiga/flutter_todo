@@ -4,12 +4,19 @@ import 'package:flutter_todo/todo.dart';
 import 'package:provider/provider.dart';
 
 class CreatePage extends StatelessWidget {
+  final int index;
+  const CreatePage({Key key, this.index}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final Todo todo = Provider.of<Todo>(context, listen: false);
     final _icon = Provider.of<ValueNotifier<IconData>>(context, listen: false);
-
     String _title = "";
+
+    if (index != null) {
+      _title = todo.todoList[index].getTitle;
+      _icon.value = todo.todoList[index].getIcon;
+    }
 
     void _pickIcon() async {
       _icon.value = await FlutterIconPicker.showIconPicker(context);
@@ -32,6 +39,8 @@ class CreatePage extends StatelessWidget {
                 ),
               ),
               TextField(
+                controller: TextEditingController(
+                    text: index != null ? todo.todoList[index].getTitle : ""),
                 decoration: InputDecoration(labelText: "TODO title"),
                 onChanged: (String text) => _title = text,
               ),
@@ -41,12 +50,14 @@ class CreatePage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      _icon != null
+                      index != null
                           ? Icon(
-                              _icon.value,
+                              _icon == null
+                                  ? todo.todoList[index].getIcon
+                                  : _icon.value,
                               size: 45.0,
                             )
-                          : Text("none"),
+                          : (index == null ? Text("none") : _icon.value),
                       ElevatedButton(
                         child: const Text("Pick Icon"),
                         onPressed: () => _pickIcon(),
@@ -56,9 +67,13 @@ class CreatePage extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
-                child: Text("Add"),
+                child: index == null ? Text("Add") : Text("Edit"),
                 onPressed: () {
-                  Navigator.pop(context, todo.addTodo(_title, _icon.value));
+                  Navigator.pop(
+                      context,
+                      index == null
+                          ? todo.addTodo(_title, _icon.value)
+                          : todo.editTodo(_title, _icon.value, index));
                 },
               ),
             ],
