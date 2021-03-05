@@ -7,6 +7,7 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Todo todo = Provider.of<Todo>(context);
+    final _icon = Provider.of<ValueNotifier<IconData>>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -41,6 +42,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 onTap: () async {
+                  if (_icon != null) _icon.value = null;
                   await Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => CreatePage(index: index),
                   ));
@@ -52,9 +54,12 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => CreatePage(),
-          ));
+          if (_icon != null) _icon.value = null;
+          await Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CreatePage(),
+            ),
+          );
         },
         child: Icon(Icons.add),
       ),
