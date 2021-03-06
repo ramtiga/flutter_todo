@@ -10,6 +10,7 @@ class Todo with ChangeNotifier {
     TodoModel todoModel = new TodoModel();
     todoModel.title = todoWork.getTitle;
     todoModel.icon = todoWork.getIcon;
+    todoModel.dateTime = todoWork.getDateTime;
     todoList.add(todoModel);
     notifyListeners();
   }
@@ -20,6 +21,7 @@ class Todo with ChangeNotifier {
     TodoModel todoModel = new TodoModel();
     todoModel.title = todoWork.getTitle;
     todoModel.icon = todoWork.getIcon;
+    todoModel.dateTime = todoWork.getDateTime;
     todoList.insert(index, todoModel);
 
     notifyListeners();

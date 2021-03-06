@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_todo/todo.dart';
 import 'package:flutter_todo/todo_work.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CreatePage extends StatelessWidget {
@@ -15,27 +16,22 @@ class CreatePage extends StatelessWidget {
     final Todo todo = Provider.of<Todo>(context, listen: false);
     final TodoWork todoWork = Provider.of<TodoWork>(context, listen: false);
 
-    //final _icon = Provider.of<ValueNotifier<IconData>>(context, listen: false);
-    //String _title = "";
-    //final TodoModel todoModel = new TodoModel();
-
     //if (index != null) {
-    //  _title = todo.todoList[index].todoWork.getTitle;
+    //todoWork.dateTimeWork = todo.todoList[index].getDateTime;
     //}
 
     void _pickIcon() async {
-      //_icon.value = await FlutterIconPicker.showIconPicker(context);
       todoWork.iconWork = await FlutterIconPicker.showIconPicker(context);
     }
 
-    //void _selectDate() async {
-    //  _date = await showDatePicker(
-    //      context: context,
-    //      initialDate: DateTime.now(),
-    //      firstDate: DateTime(DateTime.now().year),
-    //      lastDate: DateTime(DateTime.now().year + 1),
-    //      locale: const Locale("ja"));
-    //}
+    void _selectDate() async {
+      todoWork.dateTimeWork = await showDatePicker(
+          context: context,
+          initialDate: DateTime.now(),
+          firstDate: DateTime(DateTime.now().year),
+          lastDate: DateTime(DateTime.now().year + 1),
+          locale: const Locale("ja"));
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -93,8 +89,32 @@ class CreatePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                //ElevatedButton(
-                //    onPressed: () => _selectDate(), child: Text("Date")),
+                Consumer<TodoWork>(
+                  builder: (context, todoWork, child) => Container(
+                    padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        index != null
+                            ? todoWork.getDateTime == null
+                                ? Text(DateFormat.yMMMd('ja')
+                                    .format(todo.todoList[index].getDateTime)
+                                    .toString())
+                                : Text(DateFormat.yMMMd('ja')
+                                    .format(todoWork.getDateTime)
+                                    .toString())
+                            : (todoWork.getDateTime != null
+                                ? Text(DateFormat.yMMMd('ja')
+                                    .format(todoWork.getDateTime)
+                                    .toString())
+                                : Text("")),
+                        ElevatedButton(
+                            onPressed: () => _selectDate(),
+                            child: Text("Date")),
+                      ],
+                    ),
+                  ),
+                ),
                 ElevatedButton(
                   child: index == null ? Text("Add") : Text("Edit"),
                   onPressed: () {

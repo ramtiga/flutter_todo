@@ -44,7 +44,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 onTap: () async {
-                  todoWork.clear();
+                  todoWork.copyFromTodo(todo, todoWork, index);
                   await Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => CreatePage(index: index),
                   ));
