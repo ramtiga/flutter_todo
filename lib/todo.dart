@@ -1,20 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_todo/todo_model.dart';
+import 'package:flutter_todo/todo_work.dart';
 
 class Todo with ChangeNotifier {
   List<TodoModel> todoList = [];
   IconData icon;
 
-  void addTodo(String title, IconData icon) {
-    TodoModel todoModel = TodoModel(title, icon);
+  void addTodo(TodoWork todoWork) {
+    TodoModel todoModel = new TodoModel();
+    todoModel.title = todoWork.getTitle;
+    todoModel.icon = todoWork.getIcon;
     todoList.add(todoModel);
     notifyListeners();
   }
 
-  void editTodo(String title, IconData icon, int index) {
-    TodoModel todoModel = TodoModel(title, icon);
+  void editTodo(TodoWork todoWork, int index) {
     todoList.removeAt(index);
+
+    TodoModel todoModel = new TodoModel();
+    todoModel.title = todoWork.getTitle;
+    todoModel.icon = todoWork.getIcon;
     todoList.insert(index, todoModel);
+
     notifyListeners();
   }
 

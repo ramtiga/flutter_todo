@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_todo/todo.dart';
+import 'package:flutter_todo/todo_work.dart';
 import 'package:provider/provider.dart';
 
 class CreatePage extends StatelessWidget {
@@ -12,16 +13,29 @@ class CreatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Todo todo = Provider.of<Todo>(context, listen: false);
-    final _icon = Provider.of<ValueNotifier<IconData>>(context, listen: false);
-    String _title = "";
+    final TodoWork todoWork = Provider.of<TodoWork>(context, listen: false);
 
-    if (index != null) {
-      _title = todo.todoList[index].getTitle;
-    }
+    //final _icon = Provider.of<ValueNotifier<IconData>>(context, listen: false);
+    //String _title = "";
+    //final TodoModel todoModel = new TodoModel();
+
+    //if (index != null) {
+    //  _title = todo.todoList[index].todoWork.getTitle;
+    //}
 
     void _pickIcon() async {
-      _icon.value = await FlutterIconPicker.showIconPicker(context);
+      //_icon.value = await FlutterIconPicker.showIconPicker(context);
+      todoWork.iconWork = await FlutterIconPicker.showIconPicker(context);
     }
+
+    //void _selectDate() async {
+    //  _date = await showDatePicker(
+    //      context: context,
+    //      initialDate: DateTime.now(),
+    //      firstDate: DateTime(DateTime.now().year),
+    //      lastDate: DateTime(DateTime.now().year + 1),
+    //      locale: const Locale("ja"));
+    //}
 
     return Scaffold(
       appBar: AppBar(
@@ -50,25 +64,25 @@ class CreatePage extends StatelessWidget {
                     }
                     return null;
                   },
-                  onChanged: (value) => _title = value,
+                  onChanged: (value) => todoWork.title = value,
                 ),
-                Consumer<ValueNotifier<IconData>>(
-                  builder: (context, value, child) => Container(
+                Consumer<TodoWork>(
+                  builder: (context, todoWork, child) => Container(
                     padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         index != null
                             ? Icon(
-                                _icon == null
+                                todoWork.getIcon == null
                                     ? todo.todoList[index].getIcon
-                                    : _icon.value,
+                                    : todoWork.getIcon,
                                 size: 45.0,
                               )
-                            : (_icon == null
+                            : (todoWork.getIcon == null
                                 ? Text("none")
                                 : Icon(
-                                    _icon.value,
+                                    todoWork.getIcon,
                                     size: 45.0,
                                   )),
                         ElevatedButton(
@@ -79,6 +93,8 @@ class CreatePage extends StatelessWidget {
                     ),
                   ),
                 ),
+                //ElevatedButton(
+                //    onPressed: () => _selectDate(), child: Text("Date")),
                 ElevatedButton(
                   child: index == null ? Text("Add") : Text("Edit"),
                   onPressed: () {
@@ -89,8 +105,8 @@ class CreatePage extends StatelessWidget {
                     Navigator.pop(
                         context,
                         index == null
-                            ? todo.addTodo(_title, _icon.value)
-                            : todo.editTodo(_title, _icon.value, index));
+                            ? todo.addTodo(todoWork)
+                            : todo.editTodo(todoWork, index));
                   },
                 ),
               ],

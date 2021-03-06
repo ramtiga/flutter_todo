@@ -1,11 +1,17 @@
 import 'package:flutter/cupertino.dart';
 
 class TodoModel {
-  String title;
-  IconData icon;
+  String _title;
+  IconData _icon;
 
-  String get getTitle => title;
-  IconData get getIcon => icon;
+  String get getTitle => _title;
+  IconData get getIcon => _icon;
 
-  TodoModel(this.title, this.icon);
+  set title(String s) {
+    _title = s;
+  }
+
+  set icon(IconData icon) {
+    _icon = icon;
+  }
 }

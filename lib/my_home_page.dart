@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/create_page.dart';
 import 'package:flutter_todo/todo.dart';
+import 'package:flutter_todo/todo_work.dart';
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Todo todo = Provider.of<Todo>(context);
-    final _icon = Provider.of<ValueNotifier<IconData>>(context, listen: false);
+    final TodoWork todoWork = Provider.of<TodoWork>(context, listen: false);
+    //final _icon = Provider.of<ValueNotifier<IconData>>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +44,7 @@ class MyHomePage extends StatelessWidget {
                   ),
                 ),
                 onTap: () async {
-                  if (_icon != null) _icon.value = null;
+                  todoWork.clear();
                   await Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => CreatePage(index: index),
                   ));
@@ -54,7 +56,8 @@ class MyHomePage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          if (_icon != null) _icon.value = null;
+          //if (_icon != null) _icon.value = null;
+          todoWork.clear();
           await Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => CreatePage(),
