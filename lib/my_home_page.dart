@@ -21,7 +21,7 @@ class MyHomePage extends StatelessWidget {
           return Card(
             child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(width: 1.0, color: Colors.deepOrange)),
+                  border: Border.all(width: 1.0, color: Colors.indigo)),
               child: ListTile(
                 leading: Icon(todo.todoList[index].getIcon),
                 title: Text(todo.todoList[index].getTitle),
@@ -34,7 +34,7 @@ class MyHomePage extends StatelessWidget {
                       actions: [
                         IconButton(
                             icon: Icon(Icons.delete),
-                            color: Colors.deepOrange,
+                            color: Colors.indigo,
                             onPressed: () {
                               todo.deleteTodo(index);
                               Navigator.pop(context);
