@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/create_page.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_todo/todo.dart';
 import 'package:flutter_todo/todo_work.dart';
-import 'package:provider/provider.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'create_page.dart';
+import 'main.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends HookWidget {
   @override
   Widget build(BuildContext context) {
-    final Todo todo = Provider.of<Todo>(context);
-    final TodoWork todoWork = Provider.of<TodoWork>(context, listen: false);
-    //final _icon = Provider.of<ValueNotifier<IconData>>(context, listen: false);
+    final Todo todo = useProvider(todoProvider);
+    final TodoWork todoWork = useProvider(todoWorkProvider);
 
     return Scaffold(
       appBar: AppBar(

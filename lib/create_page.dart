@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_todo/todo.dart';
 import 'package:flutter_todo/todo_work.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
+import 'main.dart';
 
-class CreatePage extends StatelessWidget {
+class CreatePage extends HookWidget {
   CreatePage({Key key, this.index}) : super(key: key);
 
   final _formKey = GlobalKey<FormState>();
@@ -13,12 +15,8 @@ class CreatePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Todo todo = Provider.of<Todo>(context, listen: false);
-    final TodoWork todoWork = Provider.of<TodoWork>(context, listen: false);
-
-    //if (index != null) {
-    //todoWork.dateTimeWork = todo.todoList[index].getDateTime;
-    //}
+    final Todo todo = useProvider(todoProvider);
+    final TodoWork todoWork = useProvider(todoWorkProvider);
 
     void _pickIcon() async {
       todoWork.iconWork = await FlutterIconPicker.showIconPicker(context);
@@ -45,11 +43,9 @@ class CreatePage extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Consumer<Todo>(
-                  builder: (context, todo, child) => Text(
-                    todo.todoList.length.toString(),
-                    style: TextStyle(fontSize: 40),
-                  ),
+                Text(
+                  todo.todoList.length.toString(),
+                  style: TextStyle(fontSize: 40),
                 ),
                 TextFormField(
                   initialValue:
@@ -62,57 +58,52 @@ class CreatePage extends StatelessWidget {
                   },
                   onChanged: (value) => todoWork.title = value,
                 ),
-                Consumer<TodoWork>(
-                  builder: (context, todoWork, child) => Container(
-                    padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        index != null
-                            ? Icon(
-                                todoWork.getIcon == null
-                                    ? todo.todoList[index].getIcon
-                                    : todoWork.getIcon,
-                                size: 45.0,
-                              )
-                            : (todoWork.getIcon == null
-                                ? Text("none")
-                                : Icon(
-                                    todoWork.getIcon,
-                                    size: 45.0,
-                                  )),
-                        ElevatedButton(
-                          child: const Text("Pick Icon"),
-                          onPressed: () => _pickIcon(),
-                        ),
-                      ],
-                    ),
+                Container(
+                  padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      index != null
+                          ? Icon(
+                              todoWork.getIcon == null
+                                  ? todo.todoList[index].getIcon
+                                  : todoWork.getIcon,
+                              size: 45.0,
+                            )
+                          : (todoWork.getIcon == null
+                              ? Text("none")
+                              : Icon(
+                                  todoWork.getIcon,
+                                  size: 45.0,
+                                )),
+                      ElevatedButton(
+                        child: const Text("Pick Icon"),
+                        onPressed: () => _pickIcon(),
+                      ),
+                    ],
                   ),
                 ),
-                Consumer<TodoWork>(
-                  builder: (context, todoWork, child) => Container(
-                    padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        index != null
-                            ? todoWork.getDateTime == null
-                                ? Text(DateFormat.yMMMd('ja')
-                                    .format(todo.todoList[index].getDateTime)
-                                    .toString())
-                                : Text(DateFormat.yMMMd('ja')
-                                    .format(todoWork.getDateTime)
-                                    .toString())
-                            : (todoWork.getDateTime != null
-                                ? Text(DateFormat.yMMMd('ja')
-                                    .format(todoWork.getDateTime)
-                                    .toString())
-                                : Text("")),
-                        ElevatedButton(
-                            onPressed: () => _selectDate(),
-                            child: Text("Date")),
-                      ],
-                    ),
+                Container(
+                  padding: EdgeInsets.only(top: 20.0, bottom: 30.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      index != null
+                          ? todoWork.getDateTime == null
+                              ? Text(DateFormat.yMMMd('ja')
+                                  .format(todo.todoList[index].getDateTime)
+                                  .toString())
+                              : Text(DateFormat.yMMMd('ja')
+                                  .format(todoWork.getDateTime)
+                                  .toString())
+                          : (todoWork.getDateTime != null
+                              ? Text(DateFormat.yMMMd('ja')
+                                  .format(todoWork.getDateTime)
+                                  .toString())
+                              : Text("")),
+                      ElevatedButton(
+                          onPressed: () => _selectDate(), child: Text("Date")),
+                    ],
                   ),
                 ),
                 ElevatedButton(
