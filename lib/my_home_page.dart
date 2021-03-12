@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_todo/todo.dart';
+import 'package:flutter_todo/todo_model.dart';
 import 'package:flutter_todo/todo_work.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'create_page.dart';
@@ -11,33 +12,45 @@ class MyHomePage extends HookWidget {
   Widget build(BuildContext context) {
     final Todo todo = useProvider(todoProvider);
     final TodoWork todoWork = useProvider(todoWorkProvider);
+    int index = 0;
 
     return Scaffold(
       appBar: AppBar(
         title: Text("TODO LIST App"),
       ),
-      body: ListView.builder(
-        itemCount: todo.todoList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Card(
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(width: 1.0, color: Colors.indigo)),
+      body: Container(
+        child: ReorderableListView(
+          children: todo.todoList.map((TodoModel todoModel) {
+            return Container(
+              key: Key(todoModel.getKey),
+              decoration: BoxDecoration(color: Colors.deepOrange[400]),
               child: ListTile(
-                leading: Icon(todo.todoList[index].getIcon),
-                title: Text(todo.todoList[index].getTitle),
+                leading: Icon(
+                  todoModel.getIcon,
+                  color: Colors.white,
+                ),
+                title: Text(
+                  todoModel.getTitle,
+                  style: TextStyle(color: Colors.white),
+                ),
                 trailing: IconButton(
-                  icon: Icon(Icons.more_vert),
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  ),
                   onPressed: () => showDialog(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                      title: Text(todo.todoList[index].getTitle),
+                      title: Text(
+                        todoModel.getTitle,
+                        style: TextStyle(color: Colors.white),
+                      ),
                       actions: [
                         IconButton(
                             icon: Icon(Icons.delete),
                             color: Colors.indigo,
                             onPressed: () {
-                              todo.deleteTodo(index);
+                              todo.deleteTodo(todo.todoList.indexOf(todoModel));
                               Navigator.pop(context);
                             }),
                       ],
@@ -45,15 +58,19 @@ class MyHomePage extends HookWidget {
                   ),
                 ),
                 onTap: () async {
+                  index = todo.todoList.indexOf(todoModel);
                   todoWork.copyFromTodo(todo, todoWork, index);
                   await Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => CreatePage(index: index),
                   ));
                 },
               ),
-            ),
-          );
-        },
+            );
+          }).toList(),
+          onReorder: (oldIndex, newIndex) {
+            todo.dragAndDrop(oldIndex, newIndex);
+          },
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

@@ -50,6 +50,7 @@ class CreatePage extends HookWidget {
                 TextFormField(
                   initialValue:
                       index != null ? todo.todoList[index].getTitle : "",
+                  maxLength: 20,
                   validator: (value) {
                     if (value.isEmpty) {
                       return "タイトルを入力してください";

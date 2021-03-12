@@ -11,6 +11,7 @@ class Todo with ChangeNotifier {
     todoModel.title = todoWork.getTitle;
     todoModel.icon = todoWork.getIcon;
     todoModel.dateTime = todoWork.getDateTime;
+    todoModel.key = DateTime.now().toString();
     todoList.add(todoModel);
     notifyListeners();
   }
@@ -29,6 +30,16 @@ class Todo with ChangeNotifier {
 
   void deleteTodo(int index) {
     todoList.removeAt(index);
+    notifyListeners();
+  }
+
+  void dragAndDrop(int oldIndex, int newIndex) {
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    TodoModel todoModel = todoList.removeAt(oldIndex);
+
+    todoList.insert(newIndex, todoModel);
     notifyListeners();
   }
 }

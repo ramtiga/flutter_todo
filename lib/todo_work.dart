@@ -23,5 +23,6 @@ class TodoWork with ChangeNotifier, TodoModel {
     work.title = todo.todoList[index].getTitle;
     work.iconWork = todo.todoList[index].getIcon;
     work.dateTimeWork = todo.todoList[index].getDateTime;
+    work.key = todo.todoList[index].getKey;
   }
 }
